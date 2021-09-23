@@ -43,6 +43,11 @@ $(function () {
                 return validateX() & validateY() & validateR();
             }
 
+            // TODO: on load page => load storage if exists
+            $(window).on('load', function (){
+                
+            })
+
             $('#input-form').on('submit', function (event) {
                 event.preventDefault();
                 if (!validateForm()) return;
@@ -57,7 +62,7 @@ $(function () {
                     success: function (data) {
                         $('.button').attr('disabled', false);
                         if (data.validate) {
-                            newRow = '<tr>';
+                            newRow = '<tr id=\'table-data\'>';
                             newRow += '<td>' + data.xval + '</td>';
                             newRow += '<td>' + data.yval + '</td>';
                             newRow += '<td>' + data.rval + '</td>';
@@ -66,8 +71,13 @@ $(function () {
                             newRow += '<td>' + data.hitres + '</td>';
                             $('#result-table').append(newRow);
                         }
-
+                        // TODO: save table to local storage
                     }
                 });
             });
-        });
+
+            $('#input-form').on('reset', function (event) {
+                $('#result-table #table-data').remove();
+                // TODO: empty local storage
+            });
+});
