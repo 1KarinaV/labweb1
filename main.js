@@ -43,10 +43,24 @@ $(function () {
                 return validateX() & validateY() & validateR();
             }
 
+            let items = [];
+
             // TODO: on load page => load storage if exists
             $(window).on('load', function (){
-                
-            })
+                items = JSON.parse(window.localStorage.getItem("data"));
+                if (items != null) {
+                    for (let item of items) {
+                        newRow = '<tr id=\'table-data\'>';
+                        newRow += '<td>' + item.xval + '</td>';
+                        newRow += '<td>' + item.yval + '</td>';
+                        newRow += '<td>' + item.rval + '</td>';
+                        newRow += '<td>' + item.curtime + '</td>';
+                        newRow += '<td>' + item.exectime + '</td>';
+                        newRow += '<td>' + item.hitres + '</td>';
+                        $('#result-table').append(newRow);
+                    }
+                }
+            });
 
             $('#input-form').on('submit', function (event) {
                 event.preventDefault();
@@ -71,7 +85,12 @@ $(function () {
                             newRow += '<td>' + data.hitres + '</td>';
                             $('#result-table').append(newRow);
                         }
-                        // TODO: save table to local storage
+                        // save table to local storage
+                        let items = JSON.parse(window.localStorage.getItem("data"));
+                        if (items == null)
+                            items = [];
+                        items.push(data);
+                        window.localStorage.setItem("data", JSON.stringify(items));
                     }
                 });
             });
@@ -79,5 +98,6 @@ $(function () {
             $('#input-form').on('reset', function (event) {
                 $('#result-table #table-data').remove();
                 // TODO: empty local storage
+                window.localStorage.clear();
             });
 });
